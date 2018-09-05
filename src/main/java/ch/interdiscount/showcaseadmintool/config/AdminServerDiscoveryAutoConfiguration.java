@@ -35,6 +35,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 @ConditionalOnSingleCandidate(DiscoveryClient.class)
@@ -60,7 +61,7 @@ public class AdminServerDiscoveryAutoConfiguration {
     @Configuration
     @ConditionalOnMissingBean({ServiceInstanceConverter.class})
     @ConditionalOnBean(KubernetesClient.class)
-    public static class EurekaConverterConfiguration {
+    public static class KubernetesConverterConfiguration {
         @Bean
         @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
         public KubernetesServiceInstanceConverter serviceInstanceConverter() {
