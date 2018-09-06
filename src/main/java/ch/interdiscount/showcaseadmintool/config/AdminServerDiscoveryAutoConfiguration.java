@@ -64,16 +64,17 @@ public class AdminServerDiscoveryAutoConfiguration {
         return listener;
     }
 
-    @Configuration
-    @ConditionalOnMissingBean({ServiceInstanceConverter.class})
-    @ConditionalOnBean(KubernetesClient.class)
-    public static class KubernetesConverterConfiguration {
-        @Bean
-        @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
-        public KubernetesServiceInstanceConverter serviceInstanceConverter() {
-            return new KubernetesServiceInstanceConverter();
-        }
-    }
+//    @Configuration
+//    @ConditionalOnMissingBean({ServiceInstanceConverter.class})
+//    @ConditionalOnBean(KubernetesClient.class)
+//    public static class KubernetesConverterConfiguration {
+//        @Bean
+//        @Primary
+//        @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
+//        public KubernetesServiceInstanceConverter serviceInstanceConverter() {
+//            return new KubernetesServiceInstanceConverter();
+//        }
+//    }
 
     @Bean
     @ConditionalOnMissingBean({ServiceInstanceConverter.class})

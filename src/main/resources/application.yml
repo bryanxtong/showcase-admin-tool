@@ -27,7 +27,13 @@ management:
         include: "*"
   endpoint:
     health:
+      enabled: true
       show-details: ALWAYS
+    restart:
+      enabled: true
+      health:
+    info:
+      enabled: true
 
 ---
 
