@@ -83,7 +83,6 @@ public class AdminServerDiscoveryAutoConfiguration {
     }
 
     @Profile("secure")
-    // tag::configuration-spring-security[]
     @Configuration
     public static class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
         private final String adminContextPath;
@@ -94,7 +93,6 @@ public class AdminServerDiscoveryAutoConfiguration {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            // @formatter:off
             SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
             successHandler.setTargetUrlParameter("redirectTo");
             successHandler.setDefaultTargetUrl(adminContextPath + "/");
@@ -102,6 +100,7 @@ public class AdminServerDiscoveryAutoConfiguration {
             http.authorizeRequests()
                     .antMatchers(adminContextPath + "/assets/**").permitAll() // <1>
                     .antMatchers(adminContextPath + "/login").permitAll()
+                    .antMatchers(adminContextPath + "/actuator/**").permitAll()
                     .anyRequest().authenticated() // <2>
                     .and()
                     .formLogin().loginPage(adminContextPath + "/login").successHandler(successHandler).and() // <3>
@@ -113,7 +112,6 @@ public class AdminServerDiscoveryAutoConfiguration {
                             adminContextPath + "/instances",   // <6>
                             adminContextPath + "/actuator/**"  // <7>
                     );
-            // @formatter:on
         }
     }
 
