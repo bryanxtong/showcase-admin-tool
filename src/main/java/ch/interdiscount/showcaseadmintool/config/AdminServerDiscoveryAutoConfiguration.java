@@ -23,6 +23,7 @@ import ch.interdiscount.showcaseadmintool.discovery.InstanceDiscoveryListener;
 import ch.interdiscount.showcaseadmintool.discovery.ServiceInstanceConverter;
 import de.codecentric.boot.admin.server.config.AdminServerAutoConfiguration;
 import de.codecentric.boot.admin.server.config.AdminServerMarkerConfiguration;
+import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import de.codecentric.boot.admin.server.domain.entities.InstanceRepository;
 import de.codecentric.boot.admin.server.services.InstanceRegistry;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -36,6 +37,11 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @ConditionalOnSingleCandidate(DiscoveryClient.class)
@@ -74,5 +80,61 @@ public class AdminServerDiscoveryAutoConfiguration {
     @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
     public DefaultServiceInstanceConverter serviceInstanceConverter() {
         return new DefaultServiceInstanceConverter();
+    }
+
+    @Profile("secure")
+    // tag::configuration-spring-security[]
+    @Configuration
+    public static class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
+        private final String adminContextPath;
+
+        public SecuritySecureConfig(AdminServerProperties adminServerProperties) {
+            this.adminContextPath = adminServerProperties.getContextPath();
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+            successHandler.setTargetUrlParameter("redirectTo");
+            successHandler.setDefaultTargetUrl(adminContextPath + "/");
+
+            http.authorizeRequests()
+                    .antMatchers(adminContextPath + "/assets/**").permitAll() // <1>
+                    .antMatchers(adminContextPath + "/login").permitAll()
+                    .anyRequest().authenticated() // <2>
+                    .and()
+                    .formLogin().loginPage(adminContextPath + "/login").successHandler(successHandler).and() // <3>
+                    .logout().logoutUrl(adminContextPath + "/logout").and()
+                    .httpBasic().and() // <4>
+                    .csrf()
+                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // <5>
+                    .ignoringAntMatchers(
+                            adminContextPath + "/instances",   // <6>
+                            adminContextPath + "/actuator/**"  // <7>
+                    );
+            // @formatter:on
+        }
+    }
+
+    @Profile("insecure")
+    @Configuration
+    public static class SecurityPermitAllConfig extends WebSecurityConfigurerAdapter {
+        private final String adminContextPath;
+
+        public SecurityPermitAllConfig(AdminServerProperties adminServerProperties) {
+            this.adminContextPath = adminServerProperties.getContextPath();
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.authorizeRequests()
+                    .anyRequest()
+                    .permitAll()
+                    .and()
+                    .csrf()
+                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                    .ignoringAntMatchers(adminContextPath + "/instances", adminContextPath + "/actuator/**");
+        }
     }
 }

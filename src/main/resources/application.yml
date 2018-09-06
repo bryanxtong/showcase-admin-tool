@@ -7,6 +7,9 @@ spring:
         locator:
           enabled: true
           url-expression: "'http://'+serviceId"
+    kubernetes:
+      discovery:
+        filter: "metadata.labels['spring-boot']"
   profiles:
     active:
       - secure
@@ -16,23 +19,25 @@ logging:
     org.springframework.cloud.gateway: TRACE
     org.springframework.cloud.loadbalancer: TRACE
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
 ---
+
 spring:
   profiles: secure
   security:
     user:
       name: "user"
       password: "password"
-  boot:
-    admin:
-      client:
-        username: "user"       #These two are needed so that the client
-        password: "password"   #can register at the protected server api
-        instance:
-          metadata:
-            user.name: "user"         #These two are needed so that the server
-            user.password: "password" #can access the protected client endpoints
 
 ---
+
 spring:
   profiles: insecure
