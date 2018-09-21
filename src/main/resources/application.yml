@@ -1,6 +1,6 @@
 spring:
   application:
-    name: gateway
+    name: showcase-admin-tool
   cloud:
     gateway:
       discovery:
@@ -8,6 +8,10 @@ spring:
           enabled: true
           url-expression: "'http://'+serviceId"
     kubernetes:
+      reload:
+        enabled: true
+        mode: polling
+        period: 5000
       discovery:
         filter: "metadata.labels['spring-boot']"
 

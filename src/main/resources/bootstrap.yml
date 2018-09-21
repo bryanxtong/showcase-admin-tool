@@ -1,6 +1,6 @@
 spring:
   application:
-    name: gateway
+    name: showcase-admin-tool
   cloud:
     kubernetes:
       reload:
