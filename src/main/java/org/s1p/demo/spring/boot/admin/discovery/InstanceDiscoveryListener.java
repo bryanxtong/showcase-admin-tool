@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ch.interdiscount.showcaseadmintool.discovery;
+package org.s1p.demo.spring.boot.admin.discovery;
 
 import java.util.Collections;
 import java.util.HashSet;

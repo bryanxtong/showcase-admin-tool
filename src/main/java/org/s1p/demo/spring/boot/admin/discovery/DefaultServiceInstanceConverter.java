@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package ch.interdiscount.showcaseadmintool.discovery;
+package org.s1p.demo.spring.boot.admin.discovery;
 
 import java.net.URI;
 import java.util.Map;
 
-import de.codecentric.boot.admin.server.domain.entities.Instance;
 import de.codecentric.boot.admin.server.domain.values.Registration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

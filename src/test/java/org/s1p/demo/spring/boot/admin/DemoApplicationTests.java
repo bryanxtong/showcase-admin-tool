@@ -1,4 +1,4 @@
-package ch.interdiscount.showcaseadmintool;
+package org.s1p.demo.spring.boot.admin;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

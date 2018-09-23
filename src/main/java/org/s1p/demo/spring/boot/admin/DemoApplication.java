@@ -1,4 +1,4 @@
-package ch.interdiscount.showcaseadmintool;
+package org.s1p.demo.spring.boot.admin;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;

@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package ch.interdiscount.showcaseadmintool.discovery;
+package org.s1p.demo.spring.boot.admin.discovery;
 
 import java.net.URI;
 
-import de.codecentric.boot.admin.server.domain.entities.Instance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.kubernetes.discovery.KubernetesServiceInstance;
 import org.springframework.util.Assert;

@@ -14,7 +14,12 @@ spring:
         period: 5000
       discovery:
         filter: "metadata.labels['spring-boot']"
-
+  boot:
+    admin: 
+      monitor: 
+        status-lifetime: 5000ms
+        period: 5000ms
+        read-timeout: 5000ms
   profiles:
     active:
       - secure

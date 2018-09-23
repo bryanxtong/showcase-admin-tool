@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package ch.interdiscount.showcaseadmintool.config;
+package org.s1p.demo.spring.boot.admin.config;
 
 
-import ch.interdiscount.showcaseadmintool.discovery.DefaultServiceInstanceConverter;
-import ch.interdiscount.showcaseadmintool.discovery.KubernetesServiceInstanceConverter;
-import ch.interdiscount.showcaseadmintool.discovery.InstanceDiscoveryListener;
-import ch.interdiscount.showcaseadmintool.discovery.ServiceInstanceConverter;
+import org.s1p.demo.spring.boot.admin.discovery.DefaultServiceInstanceConverter;
+import org.s1p.demo.spring.boot.admin.discovery.InstanceDiscoveryListener;
+import org.s1p.demo.spring.boot.admin.discovery.ServiceInstanceConverter;
 import de.codecentric.boot.admin.server.config.AdminServerAutoConfiguration;
 import de.codecentric.boot.admin.server.config.AdminServerMarkerConfiguration;
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import de.codecentric.boot.admin.server.domain.entities.InstanceRepository;
 import de.codecentric.boot.admin.server.services.InstanceRegistry;
-import io.fabric8.kubernetes.client.KubernetesClient;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,7 +34,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;

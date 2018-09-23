@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ch.interdiscount</groupId>
-    <artifactId>showcase-admin-tool</artifactId>
+    <groupId>org.s1p.demo</groupId>
+    <artifactId>spring-boot-admin-k8s</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>demo</name>
-    <description>Demo project for Spring Boot</description>
+    <name>S1P : Spring Boot Admin K8s</name>
+    <description>S1P : Spring Boot Admin K8s</description>
 
 
     <properties>
@@ -120,7 +120,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>ch.interdiscount.showcaseadmintool.DemoApplication</mainClass>
+                    <mainClass>org.s1p.demo.spring.boot.admin.DemoApplication</mainClass>
                     <addResources>false</addResources>
                 </configuration>
             </plugin>
@@ -132,16 +132,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>jenkinsx</id>
-            <name>Jenkins X Releases</name>
-            <url>http://nexus.jx.35.195.224.137.nip.io/repository/maven-group/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
 </project>
