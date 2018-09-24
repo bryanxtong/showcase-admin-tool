@@ -17,8 +17,10 @@
 package org.s1p.demo.spring.boot.admin.config;
 
 
+import io.fabric8.kubernetes.client.KubernetesClient;
 import org.s1p.demo.spring.boot.admin.discovery.DefaultServiceInstanceConverter;
 import org.s1p.demo.spring.boot.admin.discovery.InstanceDiscoveryListener;
+import org.s1p.demo.spring.boot.admin.discovery.KubernetesServiceInstanceConverter;
 import org.s1p.demo.spring.boot.admin.discovery.ServiceInstanceConverter;
 import de.codecentric.boot.admin.server.config.AdminServerAutoConfiguration;
 import de.codecentric.boot.admin.server.config.AdminServerMarkerConfiguration;
@@ -26,6 +28,7 @@ import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import de.codecentric.boot.admin.server.domain.entities.InstanceRepository;
 import de.codecentric.boot.admin.server.services.InstanceRegistry;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,6 +37,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -64,23 +68,15 @@ public class AdminServerDiscoveryAutoConfiguration {
         return listener;
     }
 
-//    @Configuration
-//    @ConditionalOnMissingBean({ServiceInstanceConverter.class})
-//    @ConditionalOnBean(KubernetesClient.class)
-//    public static class KubernetesConverterConfiguration {
-//        @Bean
-//        @Primary
-//        @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
-//        public KubernetesServiceInstanceConverter serviceInstanceConverter() {
-//            return new KubernetesServiceInstanceConverter();
-//        }
-//    }
-
-    @Bean
+    @Configuration
     @ConditionalOnMissingBean({ServiceInstanceConverter.class})
-    @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
-    public DefaultServiceInstanceConverter serviceInstanceConverter() {
-        return new DefaultServiceInstanceConverter();
+    @ConditionalOnBean(KubernetesClient.class)
+    public static class KubernetesConverterConfiguration {
+        @Bean
+        @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
+        public KubernetesServiceInstanceConverter serviceInstanceConverter() {
+            return new KubernetesServiceInstanceConverter();
+        }
     }
 
     @Profile("secure")

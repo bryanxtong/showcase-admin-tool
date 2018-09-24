@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: showcase-admin-tool
   cloud:
@@ -15,7 +17,7 @@ spring:
       discovery:
         filter: "metadata.labels['spring-boot']"
   boot:
-    admin: 
+    admin:
       monitor: 
         status-lifetime: 5000ms
         period: 5000ms
@@ -57,3 +59,4 @@ spring:
 
 spring:
   profiles: insecure
+
