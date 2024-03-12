@@ -16,9 +16,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-boot-admin.version>2.1.0-SNAPSHOT</spring-boot-admin.version>
-        <spring-cloud.version>Finchley.SR1</spring-cloud.version>
-        <spring.cloud.k8s.version>1.0.0.BUILD-SNAPSHOT</spring.cloud.k8s.version>
+        <spring-boot-admin.version>3.2.2</spring-boot-admin.version>
+        <spring-cloud.version>2023.0.0</spring-cloud.version>
+        <spring.cloud.k8s.version>3.1.0</spring.cloud.k8s.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
     </properties>
 
@@ -64,6 +64,7 @@
         <dependency>
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-core</artifactId>
+            <version>1.7.2</version>
         </dependency>
         <dependency>
             <groupId>de.codecentric</groupId>
@@ -75,7 +76,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-kubernetes-config</artifactId>
+            <artifactId>spring-cloud-kubernetes-client-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-kubernetes-fabric8</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

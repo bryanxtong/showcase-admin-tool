@@ -15,10 +15,7 @@
  */
 
 package org.s1p.demo.spring.boot.admin.config;
-
-
 import io.fabric8.kubernetes.client.KubernetesClient;
-import org.s1p.demo.spring.boot.admin.discovery.DefaultServiceInstanceConverter;
 import org.s1p.demo.spring.boot.admin.discovery.InstanceDiscoveryListener;
 import org.s1p.demo.spring.boot.admin.discovery.KubernetesServiceInstanceConverter;
 import org.s1p.demo.spring.boot.admin.discovery.ServiceInstanceConverter;
@@ -28,7 +25,6 @@ import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import de.codecentric.boot.admin.server.domain.entities.InstanceRepository;
 import de.codecentric.boot.admin.server.services.InstanceRegistry;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -37,23 +33,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @ConditionalOnSingleCandidate(DiscoveryClient.class)
 @ConditionalOnBean(AdminServerMarkerConfiguration.Marker.class)
 @ConditionalOnProperty(prefix = "spring.boot.admin.discovery", name = "enabled", matchIfMissing = true)
 @AutoConfigureAfter(value = AdminServerAutoConfiguration.class, name = {
-    "org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClientAutoConfiguration",
-    "org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClientAutoConfiguration"})
+        "org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClientAutoConfiguration",
+        "org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClientAutoConfiguration"})
 public class AdminServerDiscoveryAutoConfiguration {
 
     @Bean
@@ -81,55 +75,63 @@ public class AdminServerDiscoveryAutoConfiguration {
 
     @Profile("secure")
     @Configuration
-    public static class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
+    public static class SecuritySecureConfig {
         private final String adminContextPath;
 
         public SecuritySecureConfig(AdminServerProperties adminServerProperties) {
             this.adminContextPath = adminServerProperties.getContextPath();
         }
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
             successHandler.setTargetUrlParameter("redirectTo");
             successHandler.setDefaultTargetUrl(adminContextPath + "/");
 
-            http.authorizeRequests()
-                    .antMatchers(adminContextPath + "/assets/**").permitAll() // <1>
-                    .antMatchers(adminContextPath + "/login").permitAll()
-                    .antMatchers(adminContextPath + "/actuator/**").permitAll()
-                    .anyRequest().authenticated() // <2>
-                    .and()
-                    .formLogin().loginPage(adminContextPath + "/login").successHandler(successHandler).and() // <3>
-                    .logout().logoutUrl(adminContextPath + "/logout").and()
-                    .httpBasic().and() // <4>
-                    .csrf()
-                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // <5>
-                    .ignoringAntMatchers(
-                            adminContextPath + "/instances",   // <6>
-                            adminContextPath + "/actuator/**"  // <7>
-                    );
-        }
-    }
+            http.authorizeHttpRequests(authorizeRequests -> {
+                        authorizeRequests.requestMatchers(adminContextPath + "/assets/**").permitAll() // <1>
+                                .requestMatchers(adminContextPath + "/login").permitAll()
+                                .requestMatchers(adminContextPath + "/actuator/**").permitAll()
+                                .anyRequest().authenticated(); // <2>
+                    }).formLogin(httpSecurityFormLoginConfigurer ->
+                            httpSecurityFormLoginConfigurer
+                                    .loginPage(adminContextPath + "/login")
+                                    .successHandler(successHandler))
+                    .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutUrl(adminContextPath + "/logout"))  // <3>
+                    .httpBasic(Customizer.withDefaults()) // <4>
+                    .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()));   //<5>
+            return http.build();
 
-    @Profile("insecure")
-    @Configuration
-    public static class SecurityPermitAllConfig extends WebSecurityConfigurerAdapter {
-        private final String adminContextPath;
-
-        public SecurityPermitAllConfig(AdminServerProperties adminServerProperties) {
-            this.adminContextPath = adminServerProperties.getContextPath();
         }
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests()
-                    .anyRequest()
-                    .permitAll()
-                    .and()
-                    .csrf()
-                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .ignoringAntMatchers(adminContextPath + "/instances", adminContextPath + "/actuator/**");
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+            return (web) -> web.ignoring().requestMatchers(adminContextPath + "/instances", adminContextPath + "/actuator/**");
         }
+
+
+        @Profile("insecure")
+        @Configuration
+        public static class SecurityPermitAllConfig {
+            private final String adminContextPath;
+
+            public SecurityPermitAllConfig(AdminServerProperties adminServerProperties) {
+                this.adminContextPath = adminServerProperties.getContextPath();
+            }
+
+            @Bean
+            public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http.authorizeHttpRequests(authorizeRequest -> authorizeRequest.anyRequest().permitAll())
+                        .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()));
+                return http.build();
+            }
+
+            @Bean
+            public WebSecurityCustomizer webSecurityCustomizer() {
+                return (web) -> web.ignoring().requestMatchers(adminContextPath + "/instances", adminContextPath + "/actuator/**");
+            }
+        }
+
+
     }
 }
