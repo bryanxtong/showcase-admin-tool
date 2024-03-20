@@ -19,7 +19,7 @@ package org.s1p.demo.spring.boot.admin.discovery;
 import java.net.URI;
 
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.kubernetes.discovery.KubernetesServiceInstance;
+import org.springframework.cloud.kubernetes.commons.discovery.KubernetesServiceInstance;
 import org.springframework.util.Assert;
 
 
