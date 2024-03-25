@@ -15,8 +15,7 @@
  */
 
 package org.s1p.demo.spring.boot.admin.config;
-//import io.fabric8.kubernetes.client.KubernetesClient;
-import io.kubernetes.client.openapi.apis.CoreV1Api;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import org.s1p.demo.spring.boot.admin.discovery.InstanceDiscoveryListener;
 import org.s1p.demo.spring.boot.admin.discovery.KubernetesServiceInstanceConverter;
 import org.s1p.demo.spring.boot.admin.discovery.ServiceInstanceConverter;
@@ -65,8 +64,8 @@ public class AdminServerDiscoveryAutoConfiguration {
 
     @Configuration
     @ConditionalOnMissingBean({ServiceInstanceConverter.class})
-    //@ConditionalOnBean(KubernetesClient.class)
-    @ConditionalOnBean(CoreV1Api.class)
+    @ConditionalOnBean(KubernetesClient.class)
+    //@ConditionalOnBean(CoreV1Api.class)
     public static class KubernetesConverterConfiguration {
         @Bean
         @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
