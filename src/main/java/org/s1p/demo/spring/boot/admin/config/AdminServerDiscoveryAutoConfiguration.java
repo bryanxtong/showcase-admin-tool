@@ -92,6 +92,7 @@ public class AdminServerDiscoveryAutoConfiguration {
                         authorizeRequests.requestMatchers(adminContextPath + "/assets/**").permitAll() // <1>
                                 .requestMatchers(adminContextPath + "/login").permitAll()
                                 .requestMatchers(adminContextPath + "/actuator/**").permitAll()
+                                .requestMatchers(adminContextPath + "/instances").permitAll()
                                 .anyRequest().authenticated(); // <2>
                     }).formLogin(httpSecurityFormLoginConfigurer ->
                             httpSecurityFormLoginConfigurer
@@ -104,10 +105,10 @@ public class AdminServerDiscoveryAutoConfiguration {
 
         }
 
-        @Bean
+/*        @Bean
         public WebSecurityCustomizer webSecurityCustomizer() {
             return (web) -> web.ignoring().requestMatchers(adminContextPath + "/instances", adminContextPath + "/actuator/**");
-        }
+        }*/
 
 
         @Profile("insecure")
@@ -126,10 +127,10 @@ public class AdminServerDiscoveryAutoConfiguration {
                 return http.build();
             }
 
-            @Bean
+/*            @Bean
             public WebSecurityCustomizer webSecurityCustomizer() {
                 return (web) -> web.ignoring().requestMatchers(adminContextPath + "/instances", adminContextPath + "/actuator/**");
-            }
+            }*/
         }
 
 
