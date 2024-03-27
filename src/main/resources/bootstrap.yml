@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: showcase-admin-tool
-  cloud:
-    kubernetes:
-      reload:
-        enabled: true
-        mode: polling
-        period: 5000

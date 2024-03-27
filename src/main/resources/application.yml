@@ -10,10 +10,6 @@ spring:
           enabled: true
           url-expression: "'http://'+serviceId"
     kubernetes:
-      reload:
-        enabled: true
-        mode: polling
-        period: 5000
       discovery:
         filter: "metadata.labels['spring-boot']"
         discovery-server-url: http://spring-cloud-kubernetes-discoveryserver.default.svc.cluster.local:80
