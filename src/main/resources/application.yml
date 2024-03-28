@@ -11,7 +11,8 @@ spring:
           url-expression: "'http://'+serviceId"
     kubernetes:
       discovery:
-        filter: "metadata.labels['spring-boot']"
+        ##filter not work when using discovery-server-url
+        #filter: "metadata.labels['spring-boot']"
         discovery-server-url: http://spring-cloud-kubernetes-discoveryserver.default.svc.cluster.local:80
   boot:
     admin:
@@ -41,6 +42,7 @@ management:
       health:
     info:
       enabled: true
+debug: true
 ---
 
 spring:

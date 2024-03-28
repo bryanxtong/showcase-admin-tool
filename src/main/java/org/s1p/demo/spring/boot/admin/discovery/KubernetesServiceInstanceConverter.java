@@ -25,11 +25,11 @@ import org.springframework.util.Assert;
 
 public class KubernetesServiceInstanceConverter extends DefaultServiceInstanceConverter {
 
-    @Override
+    /*@Override
     protected URI getHealthUrl(ServiceInstance instance) {
         Assert.isInstanceOf(KubernetesServiceInstance.class,
                             instance,
                             "serviceInstance must be of type KubernetesServiceInstance");
         return ((KubernetesServiceInstance) instance).getUri();
-    }
+    }*/
 }

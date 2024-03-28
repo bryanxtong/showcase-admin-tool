@@ -40,8 +40,8 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
-@ConditionalOnSingleCandidate(DiscoveryClient.class)
-@ConditionalOnBean(AdminServerMarkerConfiguration.Marker.class)
+//@ConditionalOnSingleCandidate(DiscoveryClient.class)
+//@ConditionalOnBean(AdminServerMarkerConfiguration.Marker.class)
 @ConditionalOnProperty(prefix = "spring.boot.admin.discovery", name = "enabled", matchIfMissing = true)
 @AutoConfigureAfter(value = AdminServerAutoConfiguration.class, name = {
         "org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClientAutoConfiguration",

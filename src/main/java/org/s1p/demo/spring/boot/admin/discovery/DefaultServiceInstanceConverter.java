@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.hasText;
 
 public class DefaultServiceInstanceConverter implements ServiceInstanceConverter {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultServiceInstanceConverter.class);
@@ -70,7 +70,7 @@ public class DefaultServiceInstanceConverter implements ServiceInstanceConverter
 
     protected URI getHealthUrl(ServiceInstance instance) {
         String healthPath = instance.getMetadata().get(KEY_HEALTH_PATH);
-        if (isEmpty(healthPath)) {
+        if (!hasText(healthPath)) {
             healthPath = healthEndpointPath;
         }
 
@@ -79,13 +79,13 @@ public class DefaultServiceInstanceConverter implements ServiceInstanceConverter
 
     protected URI getManagementUrl(ServiceInstance instance) {
         String managamentPath = instance.getMetadata().get(KEY_MANAGEMENT_PATH);
-        if (isEmpty(managamentPath)) {
+        if (!hasText(managamentPath)) {
             managamentPath = managementContextPath;
         }
 
         URI serviceUrl = getServiceUrl(instance);
         String managamentPort = instance.getMetadata().get(KEY_MANAGEMENT_PORT);
-        if (isEmpty(managamentPort)) {
+        if (!hasText(managamentPort)) {
             managamentPort = String.valueOf(serviceUrl.getPort());
         }
 

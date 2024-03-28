@@ -100,6 +100,15 @@ public class InstanceDiscoveryListener {
         Flux.fromIterable(discoveryClient.getServices())
             .filter(this::shouldRegisterService)
             .flatMapIterable(discoveryClient::getInstances)
+            //filter the spring-boot instance labeled for this app
+            .filter(serviceInstance -> {
+                if (serviceInstance.getMetadata()
+                        .getOrDefault("spring-boot", "false").equals("true")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            })
             .flatMap(this::registerInstance)
             .collect(Collectors.toSet())
             .flatMap(this::removeStaleInstances)
