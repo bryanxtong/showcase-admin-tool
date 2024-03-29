@@ -46,6 +46,7 @@ management:
       health:
     info:
       enabled: true
+debug: true
 ---
 
 spring:
