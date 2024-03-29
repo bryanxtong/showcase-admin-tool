@@ -47,7 +47,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @ConditionalOnBean(AdminServerMarkerConfiguration.Marker.class)
 @ConditionalOnProperty(prefix = "spring.boot.admin.discovery", name = "enabled", matchIfMissing = true)
 @AutoConfigureAfter(value = AdminServerAutoConfiguration.class, name = {
-        "org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClientAutoConfiguration",
+        "org.springframework.cloud.kubernetes.client.discovery.KubernetesInformerDiscoveryClientAutoConfiguration",
         "org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClientAutoConfiguration"})
 public class AdminServerDiscoveryAutoConfiguration {
 
@@ -65,8 +65,7 @@ public class AdminServerDiscoveryAutoConfiguration {
 
     @Configuration
     @ConditionalOnMissingBean({ServiceInstanceConverter.class})
-    //@ConditionalOnBean(KubernetesClient.class)
-    @ConditionalOnBean(CoreV1Api.class)
+    //@ConditionalOnBean(CoreV1Api.class)
     public static class KubernetesConverterConfiguration {
         @Bean
         @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
