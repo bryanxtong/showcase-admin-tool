@@ -69,12 +69,6 @@
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-server</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>de.codecentric</groupId>
-                    <artifactId>spring-boot-admin-server-cloud</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!-- Optional Kubernetes Discovery using Fabric 8 Kubernetes Java Client -->
         <dependency>
