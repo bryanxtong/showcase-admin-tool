@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.s1p.demo.spring.boot.admin.discovery;
+package org.s1p.demo.spring.boot.cloud.admin.discovery;
 
 import java.net.URI;
 import java.util.Map;
@@ -26,7 +26,6 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.springframework.util.StringUtils.hasText;
-import static org.springframework.util.StringUtils.isEmpty;
 
 public class DefaultServiceInstanceConverter implements ServiceInstanceConverter {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultServiceInstanceConverter.class);

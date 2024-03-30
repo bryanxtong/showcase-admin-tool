@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.s1p.demo.spring.boot.admin.config;
-//import io.fabric8.kubernetes.client.KubernetesClient;
+package org.s1p.demo.spring.boot.cloud.admin.config;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
-import org.s1p.demo.spring.boot.admin.discovery.InstanceDiscoveryListener;
-import org.s1p.demo.spring.boot.admin.discovery.KubernetesServiceInstanceConverter;
-import org.s1p.demo.spring.boot.admin.discovery.ServiceInstanceConverter;
+import org.s1p.demo.spring.boot.cloud.admin.discovery.InstanceDiscoveryListener;
+import org.s1p.demo.spring.boot.cloud.admin.discovery.KubernetesServiceInstanceConverter;
+import org.s1p.demo.spring.boot.cloud.admin.discovery.ServiceInstanceConverter;
 import de.codecentric.boot.admin.server.config.AdminServerAutoConfiguration;
 import de.codecentric.boot.admin.server.config.AdminServerMarkerConfiguration;
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
@@ -37,7 +36,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -65,7 +63,7 @@ public class AdminServerDiscoveryAutoConfiguration {
 
     @Configuration
     @ConditionalOnMissingBean({ServiceInstanceConverter.class})
-    //@ConditionalOnBean(CoreV1Api.class)
+    @ConditionalOnBean(CoreV1Api.class)
     public static class KubernetesConverterConfiguration {
         @Bean
         @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")
