@@ -1,6 +1,7 @@
 spring:
   main:
     allow-bean-definition-overriding: true
+    cloud-platform: kubernetes
   application:
     name: showcase-admin-tool
   cloud:

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.s1p.demo.spring.boot.admin.discovery;
+package org.s1p.demo.spring.boot.cloud.admin.discovery;
 
 import java.net.URI;
 import java.util.Map;

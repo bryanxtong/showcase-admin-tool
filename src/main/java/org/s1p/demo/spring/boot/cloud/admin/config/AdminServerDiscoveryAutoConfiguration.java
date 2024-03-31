@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.s1p.demo.spring.boot.admin.config;
-import org.s1p.demo.spring.boot.admin.discovery.InstanceDiscoveryListener;
-import org.s1p.demo.spring.boot.admin.discovery.KubernetesServiceInstanceConverter;
-import org.s1p.demo.spring.boot.admin.discovery.ServiceInstanceConverter;
+package org.s1p.demo.spring.boot.cloud.admin.config;
+import org.s1p.demo.spring.boot.cloud.admin.discovery.InstanceDiscoveryListener;
+import org.s1p.demo.spring.boot.cloud.admin.discovery.KubernetesServiceInstanceConverter;
+import org.s1p.demo.spring.boot.cloud.admin.discovery.ServiceInstanceConverter;
 import de.codecentric.boot.admin.server.config.AdminServerAutoConfiguration;
 import de.codecentric.boot.admin.server.config.AdminServerMarkerConfiguration;
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
@@ -30,6 +30,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -62,7 +63,7 @@ public class AdminServerDiscoveryAutoConfiguration {
 
     @Configuration
     @ConditionalOnMissingBean({ServiceInstanceConverter.class})
-    //@ConditionalOnBean(KubernetesClient.class)
+    @ConditionalOnBean(KubernetesDiscoveryClient.class)
     public static class KubernetesConverterConfiguration {
         @Bean
         @ConfigurationProperties(prefix = "spring.boot.admin.discovery.converter")

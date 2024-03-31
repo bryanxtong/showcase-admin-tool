@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package org.s1p.demo.spring.boot.admin.discovery;
-
-import de.codecentric.boot.admin.server.domain.entities.Instance;
-import de.codecentric.boot.admin.server.domain.values.Registration;
-import org.springframework.cloud.client.ServiceInstance;
+package org.s1p.demo.spring.boot.cloud.admin.discovery;
 
 
-public interface ServiceInstanceConverter {
+public class KubernetesServiceInstanceConverter extends DefaultServiceInstanceConverter {
 
-    /**
-     * Converts a service instance to a application instance to be registered.
-     *
-     * @param instance the service instance.
-     * @return Instance
-     */
-    Registration convert(ServiceInstance instance);
+    /*@Override
+    protected URI getHealthUrl(ServiceInstance instance) {
+        Assert.isInstanceOf(KubernetesServiceInstance.class,
+                            instance,
+                            "serviceInstance must be of type KubernetesServiceInstance");
+        return ((KubernetesServiceInstance) instance).getUri();
+    }*/
 }
